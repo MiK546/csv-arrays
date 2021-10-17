@@ -1,4 +1,4 @@
-import type {GenerateOptions} from "./types";
+import type {CsvOptions} from "./types";
 import {CsvStream} from "./CsvStream";
 
 /**
@@ -7,7 +7,7 @@ import {CsvStream} from "./CsvStream";
  * @param options Optional csv conversion options.
  * @returns The generated csv document as a string.
  */
-export function generateCsv(data: unknown[][], options: Partial<GenerateOptions> = {}): string{
+export function generateCsv(data: unknown[][], options: Partial<CsvOptions> = {}): string{
     const stream = new CsvStream(data, options);
     let csv = "";
 

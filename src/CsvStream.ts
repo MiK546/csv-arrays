@@ -1,6 +1,6 @@
 import {Readable as ReadableStream} from "stream";
 
-import type {GenerateOptions} from "./types";
+import type {CsvOptions} from "./types";
 import {HeaderStyle} from "./types";
 import {convertToCell} from "./utility";
 
@@ -11,7 +11,7 @@ export class CsvStream extends ReadableStream{
     /** The source data arrays to convert into csv. */
     private readonly data: unknown[][];
     /** Full options for csv document generation. */
-    private readonly options: GenerateOptions;
+    private readonly options: CsvOptions;
 
     /** The current line of the csv document being processed. */
     private currentLine = 0;
@@ -23,7 +23,7 @@ export class CsvStream extends ReadableStream{
      * @param data The arrays of data to convert into a csv document.
      * @param options Optional csv conversion options.
      */
-    public constructor(data: unknown[][], options: Partial<GenerateOptions> = {}){
+    public constructor(data: unknown[][], options: Partial<CsvOptions> = {}){
         super();
         // Check that all data arrays have the same length
         const targetLength = data[0].length;

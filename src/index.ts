@@ -1,5 +1,5 @@
 export {
-    GenerateOptions,
+    CsvOptions,
     HeaderStyle
 } from "./types";
 export {CsvStream} from "./CsvStream";
