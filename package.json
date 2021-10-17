@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/MiK546/csv-arrays#readme",
   "devDependencies": {
+    "@types/node": "^16.11.1",
     "typescript": "^4.4.4"
   }
 }
