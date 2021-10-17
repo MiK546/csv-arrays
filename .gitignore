@@ -1,0 +1,6 @@
+# Local development files
+.vscode
+node_modules
+
+# Compiled source
+/lib
