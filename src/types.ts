@@ -8,7 +8,7 @@ export enum HeaderStyle{
 
 /** Options for the csv generation. */
 export interface GenerateOptions{
-    /** separator used between all cells in any single row. */
+    /** Separator used between all cells in any single row. */
     cellSeparator: string;
     /** Separator used between rows. Usually the type of newline your system uses. */
     rowSeparator: string;

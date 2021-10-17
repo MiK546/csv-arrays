@@ -76,7 +76,7 @@ export class CsvStream extends ReadableStream{
                     .join(this.options.cellSeparator)
                 + this.options.rowSeparator,
                 "utf8"
-            ))
+            ));
             this.currentLine += 1;
 
             if(this.currentLine >= this.data[0].length){
