@@ -1,0 +1,14 @@
+{
+    "extends": [
+        "../.eslintrc.json"
+    ],
+    "parserOptions": {
+        "project": [
+            "./tsconfig.test.json"
+        ]
+    },
+    "rules": {
+        "node/no-unpublished-import": "off",
+        "@typescript-eslint/no-unused-expressions": "off"
+    }
+}

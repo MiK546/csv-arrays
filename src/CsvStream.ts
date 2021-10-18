@@ -25,6 +25,13 @@ export class CsvStream extends ReadableStream{
      */
     public constructor(data: unknown[][], options: Partial<CsvOptions> = {}){
         super();
+
+        // Check that the input data has the correct format
+        if(!Array.isArray(data) || data.length === 0 || !data.every((dataArray) => {
+            return Array.isArray(dataArray);
+        })){
+            throw new Error("Input data must consist of an array of arrays.");
+        }
         // Check that all data arrays have the same length
         const targetLength = data[0].length;
         for(const dataArray of data){
@@ -35,7 +42,7 @@ export class CsvStream extends ReadableStream{
 
         this.data = data;
         this.options = {
-            cellSeparator: ",",
+            columnSeparator: ",",
             rowSeparator: "\n",
             headerStyle: HeaderStyle.FIRST_ROW,
             customHeader: null,
@@ -58,7 +65,7 @@ export class CsvStream extends ReadableStream{
             const header: string[] = this.customHeader;
             this.customHeader = null;
             if(!this.push(Buffer.from(
-                header.join(this.options.cellSeparator)
+                header.join(this.options.columnSeparator)
                 + this.options.rowSeparator,
                 "utf8"
             ))){
@@ -73,7 +80,7 @@ export class CsvStream extends ReadableStream{
                     .map((dataArray) => {
                         return convertToCell(dataArray[this.currentLine]);
                     })
-                    .join(this.options.cellSeparator)
+                    .join(this.options.columnSeparator)
                 + this.options.rowSeparator,
                 "utf8"
             ));
