@@ -2,7 +2,7 @@ import {expect} from "chai";
 import {Readable as ReadableStream} from "stream";
 
 import {CsvStream} from "../src/CsvStream";
-import { HeaderStyle } from "../src/types";
+import {HeaderStyle} from "../src/types";
 
 describe("CsvStream", () => {
     it("should be a Readable stream", () => {
@@ -144,6 +144,46 @@ describe("CsvStream", () => {
             }
 
             expect(result).to.equal(`${headers.join(",")}\n${getTestResult(",", "\n")}`);
+        });
+
+        it("should add custom header even if it alone fills read stream buffer", () => {
+            const headers = [
+                Buffer.alloc(16384).toString(), // 16384 is default stream internal buffer size
+                "",
+                "",
+                ""
+            ];
+            const stream = new CsvStream(testData, {
+                headerStyle: HeaderStyle.CUSTOM,
+                customHeader: headers
+            });
+            let result = "";
+
+            let chunk: Buffer|null = Buffer.alloc(0);
+            while(chunk !== null){
+                result += chunk.toString("utf8");
+                chunk = <Buffer|null>stream.read();
+            }
+
+            expect(result).to.equal(`${headers.join(",")}\n${getTestResult(",", "\n")}`);
+        });
+
+        it("should generate csv document even if stream internal buffer temporarily fills", () => {
+            const data = [[
+                Buffer.alloc(16384).toString("utf8"),
+                Buffer.alloc(16384).toString("utf8"),
+                Buffer.alloc(16384).toString("utf8")
+            ]];
+            const stream = new CsvStream(data);
+            let result = "";
+
+            let chunk: Buffer|null = Buffer.alloc(0);
+            while(chunk !== null){
+                result += chunk.toString("utf8");
+                chunk = <Buffer|null>stream.read();
+            }
+
+            expect(result).to.equal(`${data[0].join("\n")}\n`);
         });
     });
 });
