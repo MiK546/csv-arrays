@@ -310,5 +310,22 @@ describe("CsvStream", () => {
                 stream.read();
             }).to.throw("Encountered an invalid type \"object\" array member.");
         });
+
+        it("should use a custom value converter", () => {
+            const stream = new CsvStream([[123, "abc"]], {
+                cellValueConverter(){
+                    return "The same";
+                }
+            });
+            let result = "";
+
+            let chunk: Buffer|null = Buffer.alloc(0);
+            while(chunk !== null){
+                result += chunk.toString("utf8");
+                chunk = <Buffer|null>stream.read();
+            }
+
+            expect(result).to.equal("The same\nThe same\n");
+        });
     });
 });

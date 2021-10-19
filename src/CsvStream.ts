@@ -46,6 +46,7 @@ export class CsvStream extends ReadableStream{
             rowSeparator: "\n",
             headerStyle: HeaderStyle.FIRST_ROW,
             customHeader: null,
+            cellValueConverter: convertToCell,
             ...options
         };
 
@@ -78,7 +79,7 @@ export class CsvStream extends ReadableStream{
             pushMore = this.push(Buffer.from(
                 this.data
                     .map((dataArray) => {
-                        return convertToCell(dataArray[this.currentLine]);
+                        return this.options.cellValueConverter(dataArray[this.currentLine]);
                     })
                     .join(this.options.columnSeparator)
                 + this.options.rowSeparator,

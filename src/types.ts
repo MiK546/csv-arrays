@@ -16,4 +16,6 @@ export interface CsvOptions{
     headerStyle: HeaderStyle;
     /** If header style is set to custom, this must contain a title for each provided data array. */
     customHeader: string[]|null;
+    /** A custom converter function that all cell values are converted with. */
+    cellValueConverter: (cell: unknown) => string;
 }
