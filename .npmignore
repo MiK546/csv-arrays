@@ -1,0 +1,14 @@
+# Local development files
+.vscode
+.nyc_output
+.gitignore
+.mocharc.json
+tsconfig.json
+tsconfig.test.json
+
+# Uncompiled source
+/src
+/test
+
+# Documentation
+/docs
