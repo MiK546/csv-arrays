@@ -186,4 +186,129 @@ describe("CsvStream", () => {
             expect(result).to.equal(`${data[0].join("\n")}\n`);
         });
     });
+
+    describe("value conversion", () => {
+        it("should print numbers as-is", () => {
+            const stream = new CsvStream([[1]]);
+            let result = "";
+
+            let chunk: Buffer|null = Buffer.alloc(0);
+            while(chunk !== null){
+                result += chunk.toString("utf8");
+                chunk = <Buffer|null>stream.read();
+            }
+
+            expect(result).to.equal("1\n");
+        });
+
+        it("should print strings as-is", () => {
+            const stream = new CsvStream([["some text"]]);
+            let result = "";
+
+            let chunk: Buffer|null = Buffer.alloc(0);
+            while(chunk !== null){
+                result += chunk.toString("utf8");
+                chunk = <Buffer|null>stream.read();
+            }
+
+            expect(result).to.equal("some text\n");
+        });
+
+        it("should print booleans as-is", () => {
+            const stream = new CsvStream([[true, false]]);
+            let result = "";
+
+            let chunk: Buffer|null = Buffer.alloc(0);
+            while(chunk !== null){
+                result += chunk.toString("utf8");
+                chunk = <Buffer|null>stream.read();
+            }
+
+            expect(result).to.equal("true\nfalse\n");
+        });
+
+        it("should print BigInts as-is", () => {
+            const stream = new CsvStream([[BigInt("123456789123456789123456789123456789")]]);
+            let result = "";
+
+            let chunk: Buffer|null = Buffer.alloc(0);
+            while(chunk !== null){
+                result += chunk.toString("utf8");
+                chunk = <Buffer|null>stream.read();
+            }
+
+            expect(result).to.equal("123456789123456789123456789123456789\n");
+        });
+
+        it("should print the description of symbols", () => {
+            const stream = new CsvStream([[Symbol("Symbol description")]]);
+            let result = "";
+
+            let chunk: Buffer|null = Buffer.alloc(0);
+            while(chunk !== null){
+                result += chunk.toString("utf8");
+                chunk = <Buffer|null>stream.read();
+            }
+
+            expect(result).to.equal("Symbol description\n");
+        });
+
+        it("should print an empty cell for descriptionless symbols", () => {
+            // eslint-disable-next-line symbol-description
+            const stream = new CsvStream([[1, Symbol(), 1]]);
+            let result = "";
+
+            let chunk: Buffer|null = Buffer.alloc(0);
+            while(chunk !== null){
+                result += chunk.toString("utf8");
+                chunk = <Buffer|null>stream.read();
+            }
+
+            expect(result).to.equal("1\n\n1\n");
+        });
+
+        it("should print \"undefined\" for undefined values", () => {
+            const stream = new CsvStream([[undefined]]);
+            let result = "";
+
+            let chunk: Buffer|null = Buffer.alloc(0);
+            while(chunk !== null){
+                result += chunk.toString("utf8");
+                chunk = <Buffer|null>stream.read();
+            }
+
+            expect(result).to.equal("undefined\n");
+        });
+
+        it("should print \"null\" for null values", () => {
+            const stream = new CsvStream([[null]]);
+            let result = "";
+
+            let chunk: Buffer|null = Buffer.alloc(0);
+            while(chunk !== null){
+                result += chunk.toString("utf8");
+                chunk = <Buffer|null>stream.read();
+            }
+
+            expect(result).to.equal("null\n");
+        });
+
+        it("should throw for functions in the data", () => {
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            const stream = new CsvStream([[() => {}]]);
+
+            expect(() => {
+                stream.read();
+            }).to.throw("Encountered an invalid type \"function\" array member.");
+        });
+
+        it("should throw for objects in the data", () => {
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            const stream = new CsvStream([[{}]]);
+
+            expect(() => {
+                stream.read();
+            }).to.throw("Encountered an invalid type \"object\" array member.");
+        });
+    });
 });

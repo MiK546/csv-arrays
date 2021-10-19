@@ -15,10 +15,14 @@ export function convertToCell(cell: unknown): string{
         case "symbol":
             return cell.description !== undefined ? cell.description : "";
         case "undefined":
-            return "";
+            return "undefined";
         case "function":
         case "object":
         default:
-            throw new Error(`Encountered an invalid type "${typeof cell}" array member.`);
+            if(cell === null){
+                return "null";
+            }else{
+                throw new Error(`Encountered an invalid type "${typeof cell}" array member.`);
+            }
     }
 }
