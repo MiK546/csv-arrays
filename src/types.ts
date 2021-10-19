@@ -2,7 +2,7 @@
 export enum HeaderStyle{
     /** The first row of data is also the header. This is the same as no header. */
     FIRST_ROW = "firstRow",
-    /** The csv generation options also contain custom header titles. */
+    /** Read headers from the custom array in the csv generation options. */
     CUSTOM = "custom"
 }
 
